@@ -4,6 +4,8 @@ services:
     gitbox:
         image: finzzz/gitbox
         container_name: gitbox
+        volumes:
+            - ./repos:/repos
         ports:
             - 0.0.0.0:222:22
         restart: always
