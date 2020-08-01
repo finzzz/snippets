@@ -2,4 +2,5 @@
 
 sed -ie "s/#PubkeyAuthentication/PubkeyAuthentication/g" /etc/ssh/sshd_config \
 && sed -ie "s/#PasswordAuthentication yes/PasswordAuthentication no/g" /etc/ssh/sshd_config \
+&& sed -ie "s#/usr/lib/ssh/sftp-server#internal-sftp#g" /etc/ssh/sshd_config \
 && rc-service sshd restart
