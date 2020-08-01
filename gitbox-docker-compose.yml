@@ -5,7 +5,7 @@ services:
         image: finzzz/gitbox
         container_name: gitbox
         ports:
-            - 127.0.0.1:222:22
+            - 0.0.0.0:222:22
         restart: always
 
 # docker exec -it gitbox passwd
