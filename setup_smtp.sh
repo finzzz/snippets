@@ -6,8 +6,9 @@
 DOMAIN_NAME="example.com"
 USERNAME="tom"
 PASSWORD="password"
-RCPT="susan@customer.com"
+RCPT="susan@customer.com" # For testing
 
+# Installation
 DEBIAN_FRONTEND=noninteractive apt install -y libsasl2-modules postfix mailutils
 echo "$DOMAIN_NAME" > /etc/mailname
 postconf -e "myhostname = "$DOMAIN_NAME""
