@@ -1,5 +1,7 @@
 #! /bin/bash
 
+# Setup smtp on debian based OS
+
 # Settings
 DOMAIN_NAME="example.com"
 USERNAME="tom"
