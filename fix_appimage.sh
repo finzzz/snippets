@@ -5,7 +5,7 @@
 #├── appimagetool-x86_64.AppImage
 #└── file.AppImage
 
-APPIMAGE="./Joplin.AppImage" # change this
+APPIMAGE="./file.AppImage" # change this
 APPIMAGETOOL="./appimagetool-x86_64.AppImage" # check if exists
 CHROME_PATH="/usr/lib/chromium/chrome-sandbox" # check if exists
 
