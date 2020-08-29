@@ -1,0 +1,10 @@
+[Desktop Entry]
+# put it in the ~/.local/share/applications
+# update-desktop-database ~/.local/share/applications
+Type=Application
+Name=jMemorize
+Comment=App to memorize
+Exec=/path/to/jmemorize.AppImage
+Icon=jMemorize
+Terminal=false
+Categories=Education;Languages;Java;
