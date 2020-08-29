@@ -1,6 +1,7 @@
 [Desktop Entry]
 # put it in the ~/.local/share/applications
 # update-desktop-database ~/.local/share/applications
+# categories https://specifications.freedesktop.org/menu-spec/menu-spec-1.0.html
 Type=Application
 Name=jMemorize
 Comment=App to memorize
