@@ -1,8 +1,7 @@
 #! /bin/bash        
                            
-DIR="/root"                
-USERNAME=""      
-PASSWORD=""     
+DIR="/path/to/repos"                
+TOKEN="abc123"       
                                       
 RED="\e[0;91m"             
 NC="\033[0m"               
@@ -17,7 +16,7 @@ elif [[ "$1" == "show" ]];then
     for i in $(ls -d "$DIR"/*.git/);do                                                                 
         owner=$(git -C "$i" config -l | grep remote.origin.url | cut -d "/" -f 4)                      
         repo=$(git -C "$i" config -l | grep remote.origin.url | cut -d "/" -f 5) 
-        json_data=$(curl -s -u ""$USERNAME":"$PASSWORD"" https://api.github.com/repos/"$owner"/"$repo")
+        json_data=$(curl -s -H "Authorization: "$TOKEN"" https://api.github.com/repos/"$owner"/"$repo")
         desc=$(echo "$json_data" | jq -r .description)                    
         link=$(echo "$json_data" | jq -r .html_url)   
                                                    
@@ -31,7 +30,7 @@ elif [[ "$1" == "check" ]];then
     for i in $(ls -d "$DIR"/*.git/);do                                                                                 
         owner=$(git -C "$i" config -l | grep remote.origin.url | cut -d "/" -f 4)                                      
         repo=$(git -C "$i" config -l | grep remote.origin.url | cut -d "/" -f 5)                                   
-        is_exist=$(curl -s -u ""$USERNAME":"$PASSWORD"" https://api.github.com/repos/"$owner"/"$repo" | jq -r .message)
+        is_exist=$(curl -s -H "Authorization: "$TOKEN"" https://api.github.com/repos/"$owner"/"$repo" | jq -r .message)
         [[ "$is_exist" = "Not Found" ]] && echo ""$owner"/"$repo" does not exist" || echo ""$owner"/"$repo" exists"
     done                                                                                                           
 else                                
