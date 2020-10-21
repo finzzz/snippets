@@ -22,9 +22,10 @@ elif [[ "$1" == "show" ]];then
         link=$(echo "$json_data" | jq -r .html_url)   
                                                    
         echo -ne "${RED}"$owner"/"$repo"${NC} "                                  
-        [[ "$link" == "null" ]] || echo "$link"                                 
+        [[ "$link" == "null" ]] || echo -n "$link"
+        echo ""                                 
         [[ "$desc" == "null" ]] || echo -n "$desc"                                                                     
-        echo -e "\n"                                                                                               
+        echo ""                                                                                               
     done                                                                         
 elif [[ "$1" == "check" ]];then                                                  
     for i in $(ls -d "$DIR"/*.git/);do                                                                                 
