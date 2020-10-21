@@ -7,7 +7,7 @@ RED="\e[0;91m"
 NC="\033[0m"               
                                 
 if [[ "$1" == "add" ]];then           
-    git clone --bare "$2"                                                        
+    git -C "$DIR" clone --bare "$2"                                                        
 elif [[ "$1" == "update" ]];then                                                
     for i in $(ls -d "$DIR"/*.git/);do                                                                 
         git -C "$i" fetch                             
