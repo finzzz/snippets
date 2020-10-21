@@ -24,7 +24,7 @@ elif [[ "$1" == "show" ]];then
         echo -ne "${RED}"$owner"/"$repo"${NC} "                                  
         [[ "$link" == "null" ]] || echo -n "$link"
         echo ""                                 
-        [[ "$desc" == "null" ]] || echo -n "$desc"                                                                     
+        [[ "$desc" == "null" ]] || echo "$desc"                                                                     
         echo ""                                                                                               
     done                                                                         
 elif [[ "$1" == "check" ]];then                                                  
