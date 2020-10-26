@@ -13,17 +13,17 @@ sed -ie "s/#FCGI_PROGRAM=/FCGI_PROGRAM=\/usr\/bin\/fcgiwrap/" /etc/conf.d/spawn-
 # nginx config
 echo "server {
     root /usr/share/webapps/cgit;
-    try_files $uri @cgit;
+    try_files \$uri @cgit;
 
-    rewrite ^/$ /cgit/ last;
-    rewrite ^/(\S*)/(.*)$ /cgit/$1/$2 last;
+    rewrite ^/\$ /cgit/ last;
+    rewrite ^/(\S*)/(.*)\$ /cgit/\$1/\$2 last;
 
     location @cgit {
         include fastcgi_params;
         fastcgi_pass localhost:1234;
-        fastcgi_param SCRIPT_FILE $document_root/cgit.cgi;
-        fastcgi_param PATH_INFO $uri;
-        fastcgi_param QUERY_STRING $args;
+        fastcgi_param SCRIPT_FILE \$document_root/cgit.cgi;
+        fastcgi_param PATH_INFO \$uri;
+        fastcgi_param QUERY_STRING \$args;
     }
 }" > /etc/nginx/conf.d/default.conf
 
