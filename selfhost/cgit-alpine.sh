@@ -1,9 +1,14 @@
 #! /bin/sh
 
-apk add cgit git spawn-fcgi fcgiwrap openrc nginx
+apk add cgit git spawn-fcgi fcgiwrap openrc nginx python3 py3-pip
+pip3 install markdown pygments
 
 mkdir -p /var/lib/git/repositories/public
-echo -e "virtual-root=/\nscan-path=/var/lib/git/repositories/public" > /etc/cgitrc
+echo "about-filter=/usr/lib/cgit/filters/about-formatting.sh
+source-filter=/usr/lib/cgit/filters/syntax-highlighting.py
+readme=:README.md                                          
+virtual-root=/   
+scan-path=/var/lib/git/repositories/public" > /etc/cgitrc
 
 ln -s spawn-fcgi /etc/init.d/spawn-fcgi.trac
 cp /etc/conf.d/spawn-fcgi /etc/conf.d/spawn-fcgi.trac
@@ -32,3 +37,7 @@ rc-update add spawn-fcgi.trac
 
 rc-service spawn-fcgi.trac start
 rc-service nginx start
+
+echo "To change the coloring style, modify the style argument that is passed to HtmlFormatter in the syntax-highlighting.py file."
+echo "formatter = HtmlFormatter(encoding='utf-8', style='tango')"
+python3 -c "from pygments.styles import get_all_styles;print(list(get_all_styles()))" # available styles
