@@ -6,7 +6,8 @@ apk add cgit git spawn-fcgi fcgiwrap openrc nginx python3 py3-pip openssl
 pip3 install markdown pygments
 
 # comment this out if self-signed cert is not needed
-openssl req -x509 -nodes -sha256 -subj "/CN=localhost" -newkey rsa:4096 -keyout /etc/ssl/privkey.pem -out /etc/ssl/cert.pem -days 3650
+openssl req -x509 -nodes -sha256 -subj "/CN=localhost" -newkey rsa:4096 \
+            -keyout /etc/ssl/selfsigned.key -out /etc/ssl/selfsigned.cert -days 3650
 apk del openssl
 
 git config --global gitweb.owner "$GLOBAL_OWNER"
@@ -36,8 +37,8 @@ sed -ie "s/#FCGI_PORT=/FCGI_PORT=1234/" /etc/conf.d/spawn-fcgi.trac
 sed -ie "s/#FCGI_PROGRAM=/FCGI_PROGRAM=\/usr\/bin\/fcgiwrap/" /etc/conf.d/spawn-fcgi.trac
 
 # nginx config
-echo "ssl_certificate         /etc/ssl/cert.pem;
-ssl_certificate_key     /etc/ssl/privkey.pem;
+echo "ssl_certificate         /etc/ssl/selfsigned.cert;
+ssl_certificate_key     /etc/ssl/selfsigned.key;
 
 server {
     listen 443 ssl;
