@@ -1,12 +1,19 @@
 #! /bin/sh
 
+# TODO
+# nginx port 443
+# private repo routing + basic auth
+
 apk add cgit git spawn-fcgi fcgiwrap openrc nginx python3 py3-pip
 pip3 install markdown pygments
 
 mkdir -p /var/lib/git/repositories/public
+
+# order matters
 echo "about-filter=/usr/lib/cgit/filters/about-formatting.sh
 source-filter=/usr/lib/cgit/filters/syntax-highlighting.py
-readme=:README.md                                          
+readme=:README.md   
+snapshots=tar.xz                                       
 virtual-root=/   
 scan-path=/var/lib/git/repositories/public" > /etc/cgitrc
 
