@@ -1,17 +1,18 @@
 #! /bin/sh
 
-GLOBAL_OWNER="Vincent Carlos"
+# git config gitweb.description "ADD DESCRIPTION"
+# git config gitweb.owner "SET OWNER"
 
-apk add cgit git spawn-fcgi fcgiwrap openrc nginx python3 py3-pip openssl
+# Font color
+RED='\033[1;31m'
+NC='\033[0m'
+
+apk add cgit git spawn-fcgi fcgiwrap openrc nginx python3 py3-pip openssl openssh
 pip3 install markdown pygments
 
 # comment this out if self-signed cert is not needed
 openssl req -x509 -nodes -sha256 -subj "/CN=localhost" -newkey rsa:4096 \
             -keyout /etc/ssl/selfsigned.key -out /etc/ssl/selfsigned.cert -days 3650
-apk del openssl
-
-git config --global gitweb.owner "$GLOBAL_OWNER"
-git config --global gitweb.description "add description: git config gitweb.description \"my description\""
 
 mkdir -p /var/lib/git/repositories/public
 
@@ -65,6 +66,6 @@ rc-update add spawn-fcgi.trac
 rc-service spawn-fcgi.trac start
 rc-service nginx start
 
-echo "To change the coloring style, modify the style argument that is passed to HtmlFormatter in the syntax-highlighting.py file."
+echo -e "${RED}To change the coloring style, modify the style argument that is passed to HtmlFormatter in the /usr/lib/cgit/filters/syntax-highlighting.py file.${NC}"
 echo "formatter = HtmlFormatter(encoding='utf-8', style='tango')"
 python3 -c "from pygments.styles import get_all_styles;print(list(get_all_styles()))" # available styles
