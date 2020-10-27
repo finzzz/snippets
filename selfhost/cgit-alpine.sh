@@ -45,6 +45,7 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
+    server_name _;
     root /usr/share/webapps/cgit;
     try_files \$uri @cgit;
 
