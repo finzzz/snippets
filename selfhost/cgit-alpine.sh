@@ -1,21 +1,34 @@
 #! /bin/sh
 
-# TODO
-# nginx port 443
-# private repo routing + basic auth
+GLOBAL_OWNER="Vincent Carlos"
 
-apk add cgit git spawn-fcgi fcgiwrap openrc nginx python3 py3-pip
+apk add cgit git spawn-fcgi fcgiwrap openrc nginx python3 py3-pip openssl
 pip3 install markdown pygments
+
+# comment this out if self-signed cert is not needed
+openssl req -x509 -nodes -sha256 -subj "/CN=localhost" -newkey rsa:4096 -keyout /etc/ssl/privkey.pem -out /etc/ssl/cert.pem -days 3650
+apk del openssl
+
+git config --global gitweb.owner "$GLOBAL_OWNER"
+git config --global gitweb.description "add description: git config gitweb.description \"my description\""
 
 mkdir -p /var/lib/git/repositories/public
 
 # order matters
-echo "about-filter=/usr/lib/cgit/filters/about-formatting.sh
+echo "root-title=Cool Title
+root-desc=Fully Open Source
+about-filter=/usr/lib/cgit/filters/about-formatting.sh
 source-filter=/usr/lib/cgit/filters/syntax-highlighting.py
-readme=:README.md   
-snapshots=tar.xz                                       
-virtual-root=/   
-scan-path=/var/lib/git/repositories/public" > /etc/cgitrc
+readme=:README.md
+snapshots=tar.xz
+enable-commit-graph=1
+enable-index-links=1
+enable-git-config=1
+remove-suffix=1
+virtual-root=/
+scan-path=/var/lib/git/repositories/public
+logo=
+footer=notexistfooter.txt" > /etc/cgitrc
 
 ln -s spawn-fcgi /etc/init.d/spawn-fcgi.trac
 cp /etc/conf.d/spawn-fcgi /etc/conf.d/spawn-fcgi.trac
@@ -23,7 +36,13 @@ sed -ie "s/#FCGI_PORT=/FCGI_PORT=1234/" /etc/conf.d/spawn-fcgi.trac
 sed -ie "s/#FCGI_PROGRAM=/FCGI_PROGRAM=\/usr\/bin\/fcgiwrap/" /etc/conf.d/spawn-fcgi.trac
 
 # nginx config
-echo "server {
+echo "ssl_certificate         /etc/ssl/cert.pem;
+ssl_certificate_key     /etc/ssl/privkey.pem;
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+
     root /usr/share/webapps/cgit;
     try_files \$uri @cgit;
 
