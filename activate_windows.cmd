@@ -1,4 +1,6 @@
 :: Turn off Windows defender, run this script as admin
+:: KMS server list
+:: https://gist.github.com/Zibri/69d55039e5354100d2f8a053cbe64c5a
 
 @echo off
 title Windows 10 ALL version activator&cls&echo ************************************&echo Supported products:&echo - Windows 10 Home&echo - Windows 10 Professional&echo - Windows 10 Enterprise, Enterprise LTSB&echo - Windows 10 Education&echo.&echo.&echo ************************************ &echo Windows 10 activation...
@@ -16,11 +18,11 @@ cscript //nologo c:\windows\system32\slmgr.vbs /ipk WNMTR-4C88C-JK8YV-HQ7T2-76DF
 cscript //nologo c:\windows\system32\slmgr.vbs /ipk 2F77B-TNFGY-69QQF-B8YKP-D69TJ >nul
 echo ************************************ &echo.&echo.&set i=1
 :server
-if %i%==1 set KMS_Sev=kms.shuax.com
-if %i%==2 set KMS_Sev=NextLevel.uk.to
-if %i%==3 set KMS_Sev=GuangPeng.uk.to
-if %i%==4 set KMS_Sev=AlwaysSmile.uk.to
-if %i%==5 set KMS_Sev=kms.chinancce.com 
+if %i%==1 set KMS_Sev=hq1.chinancce.com
+if %i%==2 set KMS_Sev=kms.loli.beer
+if %i%==3 set KMS_Sev=kms.cnlic.com
+if %i%==4 set KMS_Sev=kms.ddns.net
+if %i%==5 set KMS_Sev=kms.ddz.red
 if %i%==6 set KMS_Sev=kms.lotro.cc
 if %i%==7 set KMS_Sev=kms7.MSGuides.com 
 if %i%==8 set KMS_Sev=kms8.MSGuides.com 
