@@ -19,6 +19,6 @@ chmod +x "$APPIMAGE"
 "$APPIMAGE" --appimage-extract
 mv squashfs-root "$TARGET"
 rm "$TARGET"/chrome-sandbox
-ln -s /usr/lib/chromium/chrome-sandbox "$TARGET"/
+ln -s "$CHROME_PATH" "$TARGET"/
 ARCH=$(uname -m) "$APPIMAGETOOL" "$TARGET"
 rm -rf "$TARGET"

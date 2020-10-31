@@ -67,6 +67,6 @@ rc-update add spawn-fcgi.trac
 rc-service spawn-fcgi.trac start
 rc-service nginx start
 
-echo -e "${RED}To change the coloring style, modify the style argument that is passed to HtmlFormatter in the /usr/lib/cgit/filters/syntax-highlighting.py file.${NC}"
+echo "${RED}To change the coloring style, modify the style argument that is passed to HtmlFormatter in the /usr/lib/cgit/filters/syntax-highlighting.py file.${NC}"
 echo "formatter = HtmlFormatter(encoding='utf-8', style='tango')"
 python3 -c "from pygments.styles import get_all_styles;print(list(get_all_styles()))" # available styles
