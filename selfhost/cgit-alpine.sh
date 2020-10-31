@@ -27,6 +27,7 @@ enable-commit-graph=1
 enable-index-links=1
 enable-git-config=1
 remove-suffix=1
+max-repo-count=50
 virtual-root=/
 scan-path=/var/lib/git/repositories/public
 logo=
