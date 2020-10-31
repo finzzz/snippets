@@ -21,7 +21,7 @@ if [[ "$1" == "add" ]];then
     fi
 elif [[ "$1" == "update" ]];then                                                
     for i in "$DIR"/*.git/;do                                                    
-        git -C "$i" fetch                             
+        git -C "$i" fetch origin *:*                             
     done                                                                         
 elif [[ "$1" == "show" ]];then                                                   
     for i in "$DIR"/*.git/;do                                                                 
