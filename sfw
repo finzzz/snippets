@@ -1,0 +1,122 @@
+#! /bin/bash
+
+show_rules(){
+    iptables --line-numbers -v -L "$1"
+}
+
+srv_manager(){
+    if [[ -n "$(which openrc)" ]]; then
+        srv="openrc"
+    elif [[ -n "$(which systemctl)" ]]; then
+        srv="systemctl"
+    else
+        srv="unknown"
+    fi
+}
+
+check_args(){
+    case "$1" in
+    "in")
+        chain="INPUT";;
+    "out")
+        chain="OUTPUT";;
+    esac
+
+    case "$2" in
+    "allow")
+        policy="ACCEPT";;
+    "drop")
+        policy="DROP";;
+    "reject")
+        policy="REJECT";;
+    esac
+}
+
+[[ "$UID" != 0 ]] && echo "Must be run as root" && exit
+srv_manager > /dev/null
+case "$1" in
+"stats")
+    if [[ "$srv" == "systemctl" ]]; then
+        systemctl status iptables | head
+    elif [[ "$srv" == "openrc" ]]; then
+        rc-service iptables status
+    else
+        echo "$srv"
+    fi
+    show_rules INPUT
+    echo -e "\n"
+    show_rules OUTPUT
+    ;;
+"flush")
+    iptables -F;;
+"save")
+    echo "May need to install iptables-persistent"
+    iptables-save | tail -n 1;;
+"enable")
+    if [[ "$srv" == "systemctl" ]]; then
+        systemctl enable iptables  
+        systemctl start iptables
+    elif [[ "$srv" == "openrc" ]]; then
+        rc-update add iptables
+        rc-service iptables start
+    fi
+    ;;
+"disable")
+    if [[ "$srv" == "systemctl" ]]; then
+        systemctl stop iptables
+        systemctl disable iptables
+    elif [[ "$srv" == "openrc" ]]; then
+        rc-service iptables stop
+        rc-update del iptables
+    fi
+    ;;
+"reload")
+    if [[ "$srv" == "service" ]]; then
+        systemctl restart iptables 
+    elif [[ "$srv" == "openrc" ]]; then
+        rc-service iptables restart
+    fi
+    ;;
+"allow" | "drop" | "reject")
+    check_args "$2" "$1"
+
+    port=$(echo "$3" | cut -d "/" -f 1)
+    prot=$(echo "$3" | cut -d "/" -f 2)
+
+    if [[ "$prot" == "tcp" ]] || [[ "$prot" == "udp" ]]; then
+        iptables -A "$chain" -j "$policy" -p "$prot" --dport "$port" 
+    else
+        iptables -A "$chain" -j "$policy" -p tcp --dport "$port" 
+        iptables -A "$chain" -j "$policy" -p udp --dport "$port" 
+    fi
+    ;;
+"del")
+    check_args "$2"
+    iptables -D "$chain" "$3"
+    ;;
+"default")
+    check_args "$2" "$3"
+    if [[ "$policy" != "ACCEPT" ]];then 
+        read -p 'Do you want to allow local connection? [y/n] ' allow_local
+        read -p 'Do you want to allow established connection? [y/n] ' allow_established
+    fi
+
+    [[ "$allow_local" == "y" ]] && iptables -I INPUT 1 -i lo -j ACCEPT -m comment --comment "allow local conn."
+    [[ "$allow_established" == "y" ]] && iptables -I INPUT 1 -m conntrack \
+        --ctstate RELATED,ESTABLISHED -j ACCEPT  -m comment --comment "allow established and related conn."
+
+    iptables -P "$chain" "$policy"
+    ;;
+*)
+    echo "sfw stats|flush|save|enable|disable|reload"
+    echo "sfw allow|drop|reject in|out PORT/(tcp|udp)"
+    echo "sfw default in|out allow|drop|reject"
+    echo "sfw del in|out RULE_NUM"
+
+    echo ""
+    echo "Examples:"
+    echo "sfw allow in 80/tcp"
+    echo "sfw allow in 22        # will enable tcp and udp"
+    ;;
+esac
+
