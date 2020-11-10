@@ -5,9 +5,9 @@ show_rules(){
 }
 
 srv_manager(){
-    if [[ -n "$(which openrc)" ]]; then
+    if [[ -n "$(command -v openrc)" ]]; then
         srv="openrc"
-    elif [[ -n "$(which systemctl)" ]]; then
+    elif [[ -n "$(command -v systemctl)" ]]; then
         srv="systemctl"
     else
         srv="unknown"
@@ -97,8 +97,8 @@ case "$1" in
 "default")
     check_args "$2" "$3"
     if [[ "$policy" != "ACCEPT" ]];then 
-        read -p 'Do you want to allow local connection? [y/n] ' allow_local
-        read -p 'Do you want to allow established connection? [y/n] ' allow_established
+        read -rp 'Do you want to allow local connection? [y/n] ' allow_local
+        read -rp 'Do you want to allow established connection? [y/n] ' allow_established
     fi
 
     [[ "$allow_local" == "y" ]] && iptables -I INPUT 1 -i lo -j ACCEPT -m comment --comment "allow local conn."
