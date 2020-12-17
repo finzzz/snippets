@@ -40,8 +40,6 @@ case "$1" in
         systemctl status iptables | head
     elif [[ "$srv" == "openrc" ]]; then
         rc-service iptables status
-    else
-        echo "$srv"
     fi
     show_rules INPUT
     echo -e "\n"
