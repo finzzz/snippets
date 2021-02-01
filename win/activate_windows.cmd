@@ -17,6 +17,7 @@ cscript //nologo c:\windows\system32\slmgr.vbs /ipk DPH2V-TTNVB-4X9Q3-TJR4H-KHJW
 cscript //nologo c:\windows\system32\slmgr.vbs /ipk WNMTR-4C88C-JK8YV-HQ7T2-76DF9 >nul
 cscript //nologo c:\windows\system32\slmgr.vbs /ipk 2F77B-TNFGY-69QQF-B8YKP-D69TJ >nul
 echo ************************************ &echo.&echo.&set i=1
+
 :server
 if %i%==1 set KMS_Sev=hq1.chinancce.com
 if %i%==2 set KMS_Sev=kms.loli.beer
@@ -28,6 +29,7 @@ if %i%==7 set KMS_Sev=kms7.MSGuides.com
 if %i%==8 set KMS_Sev=kms8.MSGuides.com 
 if %i%==9 set KMS_Sev=kms9.MSGuides.com 
 if %i%==10 exit
+
 cscript //nologo c:\windows\system32\slmgr.vbs /skms %KMS_Sev% >nul
 cscript //nologo c:\windows\system32\slmgr.vbs /ato | find /i "successfully" && (echo.& echo ************************************ & echo. & choice /n /c YN /m "Do you want to restart your PC now [Y,N]?" & if errorlevel 2 exit) || (echo The connection to the server failed! Trying to connect to another one... & echo Please wait... & echo. & echo. & set /a i+=1 & goto server)
 shutdown.exe /r /t 00
